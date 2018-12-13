@@ -1,4 +1,5 @@
-//uses d1
+/*! d1edit https://github.com/vvvkor/d1edit */
+/* Lightweight WYSIWYG text editor */
 
 //textarea.edit[data-wys=""|"1"][data-tools], textarea.adjust
 (function () {
