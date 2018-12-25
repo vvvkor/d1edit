@@ -2,6 +2,7 @@
 /* Lightweight WYSIWYG text editor */
 
 //textarea.edit[data-wys=""|"1"][data-tools], textarea.adjust
+if(typeof module !== "undefined") var d1 = require('d1css');
 (function () {
 var main = new(function () {
 
