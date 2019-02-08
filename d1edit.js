@@ -159,8 +159,11 @@ var main = new(function () {
   }
   
   this.adjust = function(n){
-    n.style.height = 'auto';
-    n.style.height = (24 + n.scrollHeight) + 'px';
+    //1. jumps
+    //n.style.height = 'auto';
+    //n.style.height = (24 + n.scrollHeight) + 'px';
+    //2. not exact
+    n.style.height = (1.5 * (2 + (n.value.match(/\n/g) || []).length)) + 'em';
   }
 
 })();
