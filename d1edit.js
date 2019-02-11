@@ -99,7 +99,7 @@ var main = new(function () {
     d.appendChild(n);
     this.up(1, z);
     var wys = n.getAttribute('data-wys');
-    if(wys===null) wys = n.value.match(/(>|&\w+;)/) || t.indexOf('/')==-1;
+    if(wys===null) wys = (t.indexOf('/')==-1) || (n.value.match(/(>|&\w+;)/) && !n.value.match(/<script/i));
     this.mode(z, wys);
     d1.b('', [z], 'blur', this.up.bind(this, 0));
     d1.b('', [n], 'input', this.adjust.bind(this, n));
