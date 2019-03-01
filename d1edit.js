@@ -72,37 +72,44 @@ var main = new(function () {
   }
 
   this.prepare = function (n) {
-    var d = d1.ins('div', '', {className: ''});
-    var m = d1.ins('nav', '', {className: 'bg'}, d);
-    var mm = d1.ins('div');
-    var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, d);
-    z.setAttribute('contenteditable', true);
-    z.theArea = n;
-    n.theWys = z;
-    d1.setState(mm, 0)
-    var t = (n.getAttribute('data-tools') || this.opt.tools).split('');
-    var to = m, a, b;
-    for (var i in t) {
-      b = this.btn[t[i]];
-      a = d1.ins('a', b[2], {href: '#cmd-' + b[0]/*i*/, title: b[3], className: 'pad hover'}, to);
-      if(b[0] == 'tools') to = mm;
-      a.onclick = this.cmd.bind(this, z, b, a);
+    if(!n.theWys){
+      var d = d1.ins('div', '', {className: ''});
+      var m = d1.ins('nav', '', {className: 'bg'}, d);
+      var mm = d1.ins('div');
+      var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, d);
+      z.setAttribute('contenteditable', true);
+      z.theArea = n;
+      n.theWys = z;
+      d1.setState(mm, 0)
+      var t = (n.getAttribute('data-tools') || this.opt.tools).split('');
+      var to = m, a, b;
+      for (var i in t) {
+        b = this.btn[t[i]];
+        a = d1.ins('a', b[2], {href: '#cmd-' + b[0]/*i*/, title: b[3], className: 'pad hover'}, to);
+        if(b[0] == 'tools') to = mm;
+        a.onclick = this.cmd.bind(this, z, b, a);
+      }
+      m.appendChild(mm);
+      //d1.b(m, 'a', 'click', this.cmd.bind(this, z));
+      n.className += ' bord pad';
+      n.style.width = '100%';
+      this.setStyle(n);
+      this.setStyle(z);
+      var l = d1.ancestor('label', n) || n;
+      l.parentNode.insertBefore(d, l.nextSibling);
+      d.appendChild(n);
+      d1.b('', [z], 'blur', this.up.bind(this, 0));
+      d1.b('', [n], 'input', this.adjust.bind(this, n));
     }
-    m.appendChild(mm);
-    //d1.b(m, 'a', 'click', this.cmd.bind(this, z));
-    n.className += ' bord pad';
-    n.style.width = '100%';
-    this.setStyle(n);
-    this.setStyle(z);
-    var l = d1.ancestor('label', n) || n;
-    l.parentNode.insertBefore(d, l.nextSibling);
-    d.appendChild(n);
-    this.up(1, z);
+    this.up(1, n.theWys);
+    this.modeAuto(n);
+  }
+  
+  this.modeAuto = function(n){
+    var t = (n.getAttribute('data-tools') || this.opt.tools).split('');
     var wys = n.getAttribute('data-wys');
     if(wys===null) wys = (t.indexOf('/')==-1) || (n.value.match(/(>|&\w+;)/) && !n.value.match(/<script/i));
-    this.mode(z, wys);
-    d1.b('', [z], 'blur', this.up.bind(this, 0));
-    d1.b('', [n], 'input', this.adjust.bind(this, n));
+    this.mode(n.theWys, wys);
   }
 
   this.cmd = function (z, b, n, e) {
@@ -136,6 +143,7 @@ var main = new(function () {
     replace(/(\shref=")!/ig, ' target="_blank"$1').
     replace(/(\ssrc="[^"]+#[a-z]*)(\d+%?)"/ig, ' width="$2"$1"');
     //.replace(/(\ssrc="[^"]+)#([lrc])"/ig,' class="$2"$1"');
+    if(!w && (typeof(Event) === 'function')) z.theArea.dispatchEvent(new Event('input'));//-ie
   }
 
   this.mode = function (z, w) {
