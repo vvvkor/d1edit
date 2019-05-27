@@ -2,7 +2,7 @@
 
 Add-on for [d1](https://github.com/vvvkor/d1).  
 Lightweight WYSIWYG text editor.  
-[Demo & docs](http://vadimkor.ru/projects/d1#edit)
+[Demo & docs](https://vvvkor.github.io/d1#edit)
 
 ## Install
 
