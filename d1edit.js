@@ -174,6 +174,8 @@ var main = new(function () {
     n.style.height = (1.5 * (2 + (n.value.match(/\n/g) || []).length)) + 'em';
   }
 
+  d1.plug(this);
+
 })();
 
   if (typeof module !== "undefined") module.exports = main;
