@@ -8,6 +8,8 @@ var main = new(function () {
 
   "use strict";
 
+  this.name = 'edit';
+  
   this.opt = {
     qsAdjust: 'textarea.adjust',
     qsEdit: 'textarea.edit',
