@@ -82,6 +82,10 @@ var main = new(function () {
       z.setAttribute('contenteditable', true);
       z.theArea = n;
       n.theWys = z;
+      if(n.id) {
+        z.id = 'lookup-' + n.id;
+        d1.b('', '[for="' + n.id + '"]', 'click', function(lbl, e) { if(d1.getState(z)) z.focus(); });
+      }
       d1.setState(mm, 0)
       var t = (n.getAttribute('data-tools') || this.opt.tools).split('');
       var to = m, a, b;
