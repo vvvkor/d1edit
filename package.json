@@ -1,6 +1,6 @@
 {
   "name": "d1edit",
-  "version": "1.2.10",
+  "version": "1.2.11",
   "description": "Lightweight WYSIWYG editor",
   "main": "d1edit.js",
   "scripts": {

@@ -177,7 +177,7 @@ var main = new(function () {
     //n.style.height = 'auto';
     //n.style.height = (24 + n.scrollHeight) + 'px';
     //2. not exact
-    n.style.height = (1.5 * (2 + (n.value.match(/\n/g) || []).length)) + 'em';
+    n.style.height = (1.5 * (2 + Math.max(n.value.length/50, (n.value.match(/\n/g) || []).length))) + 'em';
   }
 
   d1.plug(this);
