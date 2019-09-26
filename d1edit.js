@@ -183,7 +183,6 @@ var main = new(function () {
     var a = n.value.split(/\n/)
       .map(function(v){ return Math.ceil(10 * (1 + v.length) / n.clientWidth); })
       .reduce(function(v, r){ return r + v; });
-    console.log(a);
     n.style.height = (1.5 * (2 + a)) + 'em';
   }
 
