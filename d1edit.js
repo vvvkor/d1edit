@@ -71,6 +71,7 @@ var main = new(function () {
     d1.b('', this.opt.qsAdjust, '', this.setStyle.bind(this));
     d1.b('', this.opt.qsAdjust, '', this.adjust.bind(this));
     d1.b('', this.opt.qsAdjust, 'input', this.adjust.bind(this));
+    d1.b('', [window], 'resize', d1.b.bind(d1, '', this.opt.qsAdjust, '', this.adjust.bind(this)));
   }
 
   this.prepare = function (n) {
@@ -105,7 +106,7 @@ var main = new(function () {
       l.parentNode.insertBefore(d, l.nextSibling);
       d.appendChild(n);
       d1.b('', [z], 'blur', this.up.bind(this, 0));
-      d1.b('', [n], 'input', this.adjust.bind(this, n));
+      //d1.b('', [n], 'input', this.adjust.bind(this));
     }
     this.up(1, n.theWys);
     this.modeAuto(n);
@@ -177,7 +178,13 @@ var main = new(function () {
     //n.style.height = 'auto';
     //n.style.height = (24 + n.scrollHeight) + 'px';
     //2. not exact
-    n.style.height = (1.5 * (2 + Math.max(n.value.length/50, (n.value.match(/\n/g) || []).length))) + 'em';
+    //n.style.height = (1.5 * (2 + Math.max(n.value.length/50, (n.value.match(/\n/g) || []).length))) + 'em';
+    //3. better
+    var a = n.value.split(/\n/)
+      .map(function(v){ return Math.ceil(10 * (1 + v.length) / n.clientWidth); })
+      .reduce(function(v, r){ return r + v; });
+    console.log(a);
+    n.style.height = (1.5 * (2 + a)) + 'em';
   }
 
   d1.plug(this);
