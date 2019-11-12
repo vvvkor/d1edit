@@ -13,7 +13,7 @@ var main = new(function () {
   this.opt = {
     qsAdjust: 'textarea.adjust',
     qsEdit: 'textarea.edit',
-    height: '50vh',
+    height: 30,//em
     tools: '/*@xbi_.#123p|c,s^vdqf~T(=)j+-'
   };
   
@@ -71,17 +71,19 @@ var main = new(function () {
     d1.b('', this.opt.qsAdjust, '', this.setStyle.bind(this));
     d1.b('', this.opt.qsAdjust, '', this.adjust.bind(this));
     d1.b('', this.opt.qsAdjust, 'input', this.adjust.bind(this));
+    d1.b('', this.opt.qsAdjust, 'mouseup', this.resized.bind(this));
     d1.b('', [window], 'resize', d1.b.bind(d1, '', this.opt.qsAdjust, '', this.adjust.bind(this)));
   }
 
   this.prepare = function (n) {
     if(!n.theWys){
-      var d = d1.ins('div', '', {className: ''});
-      var m = d1.ins('nav', '', {className: 'bg'}, d);
+//      var d = d1.ins('div', '', {className: ''});
+      var m = d1.ins('nav', '', {className: 'bg'}, /*d*/ n, -1);
       var mm = d1.ins('div');
-      var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, d);
+      var z = d1.ins('div', '', {className: d1.opt.cHide + ' bord pad'}, /*d*/ n, 1);
       z.setAttribute('contenteditable', true);
       z.theArea = n;
+      z.theNav = m;
       n.theWys = z;
       if(n.id) {
         z.id = 'lookup-' + n.id;
@@ -103,9 +105,11 @@ var main = new(function () {
       this.setStyle(n);
       this.setStyle(z);
       var l = d1.ancestor('label', n) || n;
-      l.parentNode.insertBefore(d, l.nextSibling);
-      d.appendChild(n);
+      //l.parentNode.insertBefore(d, l.nextSibling);
+      //d.insertBefore(n, z);
+      ////d.appendChild(n);
       d1.b('', [z], 'blur', this.up.bind(this, 0));
+      d1.b('', [z], 'input', this.up.bind(this, 0));//for validation
       //d1.b('', [n], 'input', this.adjust.bind(this));
     }
     this.up(1, n.theWys);
@@ -147,9 +151,9 @@ var main = new(function () {
   this.up = function (w, z) {
     if (w) z.innerHTML = z.theArea.value;
     else z.theArea.value = z.innerHTML.
-    replace(/(\shref=")!/ig, ' target="_blank"$1').
-    replace(/(\ssrc="[^"]+#[a-z]*)(\d+%?)"/ig, ' width="$2"$1"');
-    //.replace(/(\ssrc="[^"]+)#([lrc])"/ig,' class="$2"$1"');
+      replace(/(\shref=")!/ig, ' target="_blank"$1').
+      replace(/(\ssrc="[^"]+#[a-z]*)(\d+%?)"/ig, ' width="$2"$1"');
+      //.replace(/(\ssrc="[^"]+)#([lrc])"/ig,' class="$2"$1"');
     if(!w && (typeof(Event) === 'function')) z.theArea.dispatchEvent(new Event('input'));//-ie
   }
 
@@ -161,19 +165,32 @@ var main = new(function () {
       else this.adjust(z.theArea);
     }
     this.up(w, z);
-    d1.b(z.previousSibling, 'a', '', function (n) {
+    d1.b(z.theNav, 'a', '', function (n) {
       if(n.hash != '#cmd-src') d1.setState(n, w);
     });
+    z.theArea.theManual = 0;
+    z.theArea.style.width = '100%';
   }
 
   this.setStyle = function(n){
-    n.style.resize = 'vertical'; //both
+    //n.style.resize = 'vertical'; //both
     n.style.overflow = 'auto';
     n.style.minHeight = '3em';
-    n.style.maxHeight = this.opt.height;
+    n.style.maxHeight = '80vh';//n.type ? '80vh' : this.opt.height + 'em';
+    this.storeSize(n);
+  }
+  
+  this.storeSize = function(n){
+    n.theH = n.clientHeight;
+    n.theW = n.clientWidth;
+  }
+  
+  this.resized = function(n){
+    if(n.theH !== n.clientHeight || n.theW !== n.clientWidth) n.theManual = 1;
   }
   
   this.adjust = function(n){
+    if(n.theManual) return;
     //1. jumps
     //n.style.height = 'auto';
     //n.style.height = (24 + n.scrollHeight) + 'px';
@@ -181,9 +198,10 @@ var main = new(function () {
     //n.style.height = (1.5 * (2 + Math.max(n.value.length/50, (n.value.match(/\n/g) || []).length))) + 'em';
     //3. better
     var a = n.value.split(/\n/)
-      .map(function(v){ return Math.ceil(10 * (1 + v.length) / n.clientWidth); })
+      .map(function(v){ return Math.ceil(10 * (1 + v.length) / (n.clientWidth || 500)); })
       .reduce(function(v, r){ return r + v; });
-    n.style.height = (1.5 * (2 + a)) + 'em';
+    n.style.height = Math.min(1.5 * (2 + a), parseFloat(this.opt.height)) + 'em';
+    this.storeSize(n);
   }
 
   d1.plug(this);

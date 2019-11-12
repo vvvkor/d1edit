@@ -44,8 +44,8 @@ Query selector of textarea elements to enable WYSIWYG.  Default: ``"textarea.edi
 
 ### height
 
-Default height of WYSIWYG editor.  
-Default: ``"50vh"``
+Default height of WYSIWYG editor in ``em``s.  
+Default: ``50``
 
 ### tools
 
